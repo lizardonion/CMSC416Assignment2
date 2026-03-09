@@ -69,20 +69,20 @@ kmeans_mpi Timing Table
   the job script.
 
   digits_all_5e3.txt digits_all_1e4.txt
-  -------------------------------------------------------------------
-                                       Data File                     
-   Procs  digits_all_5e3.txt  digits_all_1e4.txt  digits_all_3e4.txt 
-  -------------------------------------------------------------------
-       1               00.00               00.00               00.00 
-       2               00.00               00.00               00.00 
-       4               00.00               00.00               00.00 
-       8               00.00               00.00               00.00 
-      10               00.00               00.00               00.00 
-      16               00.00               00.00               00.00 
-      32               00.00               00.00               00.00 
-      64               00.00               00.00               00.00 
-     128               00.00               00.00               00.00 
-  -------------------------------------------------------------------
+-------------------------------------------------------------------
+                                  Data File
+ Procs  digits_all_5e3.txt  digits_all_1e4.txt  digits_all_3e4.txt
+-------------------------------------------------------------------
+    1               3.35              17.77              47.51
+    2               0.10               0.08               0.07
+    4               0.07               0.07               0.07
+    8               0.09               0.07               0.07
+   10               0.14               0.07               0.07
+   16               0.07               0.07               0.07
+   32               0.07               0.07               0.07
+   64               0.08               0.07               0.07
+  128               0.07               0.07               0.07
+-------------------------------------------------------------------
 
 
 kmeans_mpi Discussion Questions
@@ -90,11 +90,23 @@ kmeans_mpi Discussion Questions
 
   Analyze your table of results and answer the following questions.
   1. Did using more processors result in speedups?
+  Yes, using more processors resulted in large apparent speedups compared to the single-processor case. 
+  The runtimes with one processor were significantly larger (3.35 s, 17.77 s, and 47.51 s for the three datasets), 
+  while runs with two or more processors completed in around 0.07–0.14 seconds. 
+  This shows that parallelization shortened runtime compared to the serial execution.
+
   2. Describe any trends or anomalies you see in the timings and
-     speculate on their causes - e.g. was there are a steady increase in
-     runtimes, steady decrease, or jagged changes in timing?
+  speculate on their causes - e.g. was there are a steady increase in
+  runtimes, steady decrease, or jagged changes in timing?
+  The main trend is a large drop in runtime when moving from one processor to multiple processors. 
+  After two processors, the runtimes stay almost constant at around 0.07 seconds regardless of processor count. 
+  This might be because of communication overhead or timing resolution making differences between runs difficult to notice.
+  
   3. Try to explain how number of processors and problem size seem to
-     affect runtimes/speedup in the problem.
+  affect runtimes/speedup in the problem.
+  Problem size clearly affects runtime with one processor, where larger datasets take longer to run. 
+  With multiple processors, runtimes stay about the same across the datasets because the work is split across processors. 
+  In general, larger problems benefit more from parallel processing than smaller ones.
 
 
 Work Disclosure
@@ -114,6 +126,9 @@ Work Disclosure
   utilized in the completion of this work. Include course materials such
   as textbooks and lecture slides as well. (Write NONE if no resources
   were used [which would be hard to believe]).
+  - ChatGPT (OpenAI) was used to help debug issues on P3 when running jobs on
+  Zaratan, particularly when mysterious runtime errors
+  occurred that turned out to just be zaratan issues and were fixed by testing on gradescope.
   - Resource 1 is here <https://some.resource.org/useful_stuff.html> and
     provided help for Problem Z to understand ....
   - Resource 2 is the book "Parallel Analysis" by Auth Or with chapter 8
@@ -130,5 +145,5 @@ Work Disclosure
   with the course's PRIME DIRECTIVE.
 
   Signed,
-
+  Alec Agayan, 
   TYPE NAME(S) OF SUBMITTERS
