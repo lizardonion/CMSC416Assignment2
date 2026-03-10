@@ -20,15 +20,15 @@ heat_mpi Timing Table
                  Width         
    Procs   6400  25600  102400 
   -----------------------------
-       1  00.00  00.00   00.00 
-       2  00.00  00.00   00.00 
-       4  00.00  00.00   00.00 
-       8  00.00  00.00   00.00 
-      10  00.00  00.00   00.00 
-      16  00.00  00.00   00.00 
-      32  00.00  00.00   00.00 
-      64  00.00  00.00   00.00 
-     128  00.00  00.00   00.00 
+       1  00.97  00.68   00.75 
+       2  00.70  00.69   00.72 
+       4  00.69  00.69   00.71 
+       8  00.70  00.72   00.75 
+      10  00.75  00.74   00.77 
+      16  00.84  01.12   00.80 
+      32  00.90  00.96   00.99 
+      64  01.21  01.25   01.32 
+     128  05.40  01.86   02.37 
   -----------------------------
 
 
@@ -37,11 +37,18 @@ heat_mpi Discussion Questions
 
   Analyze your table of results and answer the following questions.
   1. Did using more processors result in speedups?
+    No, it looks like adding more processors actually slowed it down. We can already see in the 2 proc row, the times are
+    very close, so most of the compute time is spent in communication, and not solving the problem, because scaling up the problem had little impact on time.
+    When we add more procs at the end, the times explode.
   2. Describe any trends or anomalies you see in the timings and
      speculate on their causes - e.g. was there are a steady increase in
      runtimes, steady decrease, or jagged changes in timing?
+      Steady increase in runtiems for the most part as we add more procs, but the last row is a little odd with the middle being the fastest by far,
+      but I guess we can chalk that up to variance.
   3. Try to explain how number of processors and problem size seem to
      affect runtimes/speedup in the problem.
+      As before, the problem size seems to have little impact on the times, even with a small amount of procs.
+      This means that most of the time is spent in communication between the procs.
 
 
 Problem 2: kmeans_serial vs kmeans_mpi
@@ -145,5 +152,6 @@ Work Disclosure
   with the course's PRIME DIRECTIVE.
 
   Signed,
-  Alec Agayan, 
+  Alec Agayan,
+  Sean Coughlin,
   TYPE NAME(S) OF SUBMITTERS
