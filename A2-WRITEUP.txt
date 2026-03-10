@@ -43,7 +43,7 @@ heat_mpi Discussion Questions
   2. Describe any trends or anomalies you see in the timings and
      speculate on their causes - e.g. was there are a steady increase in
      runtimes, steady decrease, or jagged changes in timing?
-      Steady increase in runtiems for the most part as we add more procs, but the last row is a little odd with the middle being the fastest by far,
+      Steady increase in runtimes for the most part as we add more procs, but the last row is a little odd with the middle being the fastest by far,
       but I guess we can chalk that up to variance.
   3. Try to explain how number of processors and problem size seem to
      affect runtimes/speedup in the problem.
@@ -151,9 +151,7 @@ Work Disclosure
   the completion of this work INCLUDING course staff members. (Write
   NONE if no collaborators were involved.)
 
-  - Sean Coughlin <spcough@umd.edu> implemented the MPI heat simulation in Problem 1 and gathered the results for output.
-  - Caitlin Yan <cyan123@umd.edu> detailed the k-means clusting algorithm process for Problem 2
-  - Alec Agayan <agayan@umd.edu> implemented the parallelization of Problem 3's k-means clustering algorithm using MPI.
+  NONE
 
   (B) *Resource Utilization:* The following resources such as websites,
   course notes, artificial intelligence tools (LLMs/ChatBots/etc.) were
@@ -161,8 +159,7 @@ Work Disclosure
   as textbooks and lecture slides as well. (Write NONE if no resources
   were used [which would be hard to believe]).
   - ChatGPT (OpenAI) was used to help debug issues on P3 when running jobs on
-  Zaratan, particularly when mysterious runtime errors. It was also used to help debug issues
-  on P1.
+  Zaratan, particularly when mysterious runtime errors. It was also used to help debug issues on P1.
   occurred that turned out to just be zaratan issues and were fixed by testing on gradescope.
   - Lecture slide a2-kmeans-overview is <https://www.cs.umd.edu/~profk/416/a2-kmeans-overview.pdf> and
   provided help for Problem 2 to understand how to partition the data and other details.
