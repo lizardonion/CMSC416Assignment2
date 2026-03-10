@@ -56,9 +56,36 @@ Problem 2: kmeans_serial vs kmeans_mpi
 
   Discuss how you chose to parallelize your serial version of K-means in
   the program `kmeans_mpi.c'. Answer the following questions briefly.
+
   1. How is the input and output data partitioned among the processors?
+
+Our original serial code does everything in one process, meaning that it reads
+the dataset, stores all the points, computes the cluster centers, and then
+reassigns all the points. For the MPI version, processor 0 reads the full dataset and then 
+distributes it across multiple processors using MPI_Scatterv. Because of this, instead of one 
+loop going through every point, each processor only goes through its own local chunk in 
+order to give the parallel version speedup.
+
   2. What communication is required throughout the algorithm?
+
+Because the data is split up, the processors need to communicate with each other 
+and have to agree on the cluster centers at each step. Each processor computes 
+partial cluster sums using its own local points. Then, those partial 
+results are combined to get the new global cluster centers. After that, processor 0 broadcasts
+the updated centers back out to all processors so they can do the next assignment step.
+Each processor also keeps track of how many assignments changed locally, and those 
+local counts are combined to get the total number of changes. Once there are no more
+global changes, the algorithm finishes.
+
   3. Which MPI collective communication operations did you employ?
+
+The main MPI operations we use are MPI_Bcast, MPI_Scatterv, 
+MPI_Reduce, MPI_Allreduce, and MPI_Gatherv. MPI_Bcast is used 
+to send metadata and updated cluster centers from processor 0 to the other processors.
+MPI_Scatterv is used to divide the dataset across processors. MPI_Reduce is used to combine partial 
+feature sums and cluster counts on processor 0. MPI_Allreduce is used to combine the local 
+assignment-change counts into a global total. At the end, MPI_Gatherv is used to collect the 
+final assignments back to processor 0.
 
 
 Problem 3: kmeans_mpi
@@ -123,10 +150,10 @@ Work Disclosure
   assignment, the following people contributed ideas and discussion to
   the completion of this work INCLUDING course staff members. (Write
   NONE if no collaborators were involved.)
-  - Person 1 <person1@email.com> helped understand Problem X and the
-    meaning of ...
-  - Person 2 <person2@email.com> helped debug Cod for Problem Y...
-  - etc.
+
+  - Sean Coughlin <spcough@umd.edu> implemented the MPI heat simulation in Problem 1 and gathered the results for output.
+  - Caitlin Yan <cyan123@umd.edu> detailed the k-means clusting algorithm process for Problem 2
+  - Alec Agayan <agayan@umd.edu> implemented the parallelization of Problem 3's k-means clustering algorithm using MPI.
 
   (B) *Resource Utilization:* The following resources such as websites,
   course notes, artificial intelligence tools (LLMs/ChatBots/etc.) were
@@ -134,16 +161,15 @@ Work Disclosure
   as textbooks and lecture slides as well. (Write NONE if no resources
   were used [which would be hard to believe]).
   - ChatGPT (OpenAI) was used to help debug issues on P3 when running jobs on
-  Zaratan, particularly when mysterious runtime errors
+  Zaratan, particularly when mysterious runtime errors. It was also used to help debug issues
+  on P1.
   occurred that turned out to just be zaratan issues and were fixed by testing on gradescope.
-  - Resource 1 is here <https://some.resource.org/useful_stuff.html> and
-    provided help for Problem Z to understand ....
-  - Resource 2 is the book "Parallel Analysis" by Auth Or with chapter 8
-    helping a lot with Problem W
-  - Resource 3 is here <https://airegurgitator.com> and provided AI
-    refinements for the writing of problem Q and helped debug code for
-    Problem N.
-  - etc.
+  - Lecture slide a2-kmeans-overview is <https://www.cs.umd.edu/~profk/416/a2-kmeans-overview.pdf> and
+  provided help for Problem 2 to understand how to partition the data and other details.
+  - Lecture slide 05-comm-patterns is <https://www.cs.umd.edu/~profk/416/05-comm-patterns.pdf> and
+  was also used to understand which collectives to use in Problem 2.
+ 
+
 
   (C) *Ownership of Work*: I / We affirm that all parties listed below
   have contributed to each solution presented in this document.  All
@@ -154,4 +180,4 @@ Work Disclosure
   Signed,
   Alec Agayan,
   Sean Coughlin,
-  TYPE NAME(S) OF SUBMITTERS
+  Caitlin Yan
