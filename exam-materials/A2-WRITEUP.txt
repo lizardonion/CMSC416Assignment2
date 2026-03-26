@@ -1,0 +1,180 @@
+                              ____________
+
+                               A2 WRITEUP
+                              ____________
+
+
+Problem 1: heat_mpi
+===================
+
+heat_mpi Timing Table
+~~~~~~~~~~~~~~~~~~~~~
+
+  Fill in the following table on measuring the performance of your
+  `heat_mpi' program on Zaratan. Replace 00.00 entries with your actual
+  run times. You can use the provided `heat-slurm.sh' script to ease
+  this task. Submit it using `sbatch heat-slurm.sh' and extract the
+  lines marked `runtime:'.
+
+  -----------------------------
+                 Width         
+   Procs   6400  25600  102400 
+  -----------------------------
+       1  00.97  00.68   00.75 
+       2  00.70  00.69   00.72 
+       4  00.69  00.69   00.71 
+       8  00.70  00.72   00.75 
+      10  00.75  00.74   00.77 
+      16  00.84  01.12   00.80 
+      32  00.90  00.96   00.99 
+      64  01.21  01.25   01.32 
+     128  05.40  01.86   02.37 
+  -----------------------------
+
+
+heat_mpi Discussion Questions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Analyze your table of results and answer the following questions.
+  1. Did using more processors result in speedups?
+    No, it looks like adding more processors actually slowed it down. We can already see in the 2 proc row, the times are
+    very close, so most of the compute time is spent in communication, and not solving the problem, because scaling up the problem had little impact on time.
+    When we add more procs at the end, the times explode.
+  2. Describe any trends or anomalies you see in the timings and
+     speculate on their causes - e.g. was there are a steady increase in
+     runtimes, steady decrease, or jagged changes in timing?
+      Steady increase in runtimes for the most part as we add more procs, but the last row is a little odd with the middle being the fastest by far,
+      but I guess we can chalk that up to variance.
+  3. Try to explain how number of processors and problem size seem to
+     affect runtimes/speedup in the problem.
+      As before, the problem size seems to have little impact on the times, even with a small amount of procs.
+      This means that most of the time is spent in communication between the procs.
+
+
+Problem 2: kmeans_serial vs kmeans_mpi
+======================================
+
+  Discuss how you chose to parallelize your serial version of K-means in
+  the program `kmeans_mpi.c'. Answer the following questions briefly.
+
+  1. How is the input and output data partitioned among the processors?
+
+Our original serial code does everything in one process, meaning that it reads
+the dataset, stores all the points, computes the cluster centers, and then
+reassigns all the points. For the MPI version, processor 0 reads the full dataset and then 
+distributes it across multiple processors using MPI_Scatterv. Because of this, instead of one 
+loop going through every point, each processor only goes through its own local chunk in 
+order to give the parallel version speedup.
+
+  2. What communication is required throughout the algorithm?
+
+Because the data is split up, the processors need to communicate with each other 
+and have to agree on the cluster centers at each step. Each processor computes 
+partial cluster sums using its own local points. Then, those partial 
+results are combined to get the new global cluster centers. After that, processor 0 broadcasts
+the updated centers back out to all processors so they can do the next assignment step.
+Each processor also keeps track of how many assignments changed locally, and those 
+local counts are combined to get the total number of changes. Once there are no more
+global changes, the algorithm finishes.
+
+  3. Which MPI collective communication operations did you employ?
+
+The main MPI operations we use are MPI_Bcast, MPI_Scatterv, 
+MPI_Reduce, MPI_Allreduce, and MPI_Gatherv. MPI_Bcast is used 
+to send metadata and updated cluster centers from processor 0 to the other processors.
+MPI_Scatterv is used to divide the dataset across processors. MPI_Reduce is used to combine partial 
+feature sums and cluster counts on processor 0. MPI_Allreduce is used to combine the local 
+assignment-change counts into a global total. At the end, MPI_Gatherv is used to collect the 
+final assignments back to processor 0.
+
+
+Problem 3: kmeans_mpi
+=====================
+
+kmeans_mpi Timing Table
+~~~~~~~~~~~~~~~~~~~~~~~
+
+  Fill in the following table on measuring the performance of your
+  `kmeans_mpi' program on Zaratan. Replace 00.00 entries with your
+  actual run times. You can use the provided `kmeans-slurm.sh' script to
+  ease this task.
+
+  The columns are for each of 3 data files that are provided and run in
+  the job script.
+
+  digits_all_5e3.txt digits_all_1e4.txt
+-------------------------------------------------------------------
+                                  Data File
+ Procs  digits_all_5e3.txt  digits_all_1e4.txt  digits_all_3e4.txt
+-------------------------------------------------------------------
+    1               3.35              17.77              47.51
+    2               0.10               0.08               0.07
+    4               0.07               0.07               0.07
+    8               0.09               0.07               0.07
+   10               0.14               0.07               0.07
+   16               0.07               0.07               0.07
+   32               0.07               0.07               0.07
+   64               0.08               0.07               0.07
+  128               0.07               0.07               0.07
+-------------------------------------------------------------------
+
+
+kmeans_mpi Discussion Questions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Analyze your table of results and answer the following questions.
+  1. Did using more processors result in speedups?
+  Yes, using more processors resulted in large apparent speedups compared to the single-processor case. 
+  The runtimes with one processor were significantly larger (3.35 s, 17.77 s, and 47.51 s for the three datasets), 
+  while runs with two or more processors completed in around 0.07–0.14 seconds. 
+  This shows that parallelization shortened runtime compared to the serial execution.
+
+  2. Describe any trends or anomalies you see in the timings and
+  speculate on their causes - e.g. was there are a steady increase in
+  runtimes, steady decrease, or jagged changes in timing?
+  The main trend is a large drop in runtime when moving from one processor to multiple processors. 
+  After two processors, the runtimes stay almost constant at around 0.07 seconds regardless of processor count. 
+  This might be because of communication overhead or timing resolution making differences between runs difficult to notice.
+  
+  3. Try to explain how number of processors and problem size seem to
+  affect runtimes/speedup in the problem.
+  Problem size clearly affects runtime with one processor, where larger datasets take longer to run. 
+  With multiple processors, runtimes stay about the same across the datasets because the work is split across processors. 
+  In general, larger problems benefit more from parallel processing than smaller ones.
+
+
+Work Disclosure
+===============
+
+  (A) *Human Collaborators:* Aside from the 1-2 people submitting this
+  assignment, the following people contributed ideas and discussion to
+  the completion of this work INCLUDING course staff members. (Write
+  NONE if no collaborators were involved.)
+
+  NONE
+
+  (B) *Resource Utilization:* The following resources such as websites,
+  course notes, artificial intelligence tools (LLMs/ChatBots/etc.) were
+  utilized in the completion of this work. Include course materials such
+  as textbooks and lecture slides as well. (Write NONE if no resources
+  were used [which would be hard to believe]).
+  - ChatGPT (OpenAI) was used to help debug issues on P3 when running jobs on
+  Zaratan, particularly when mysterious runtime errors. It was also used to help debug issues on P1.
+  occurred that turned out to just be zaratan issues and were fixed by testing on gradescope.
+  - Lecture slide a2-kmeans-overview is <https://www.cs.umd.edu/~profk/416/a2-kmeans-overview.pdf> and
+  provided help for Problem 2 to understand how to partition the data and other details.
+  - Lecture slide 05-comm-patterns is <https://www.cs.umd.edu/~profk/416/05-comm-patterns.pdf> and
+  was also used to understand which collectives to use in Problem 2.
+ 
+
+
+  (C) *Ownership of Work*: I / We affirm that all parties listed below
+  have contributed to each solution presented in this document.  All
+  parties are capable of describing how the solutions were derived, how
+  they apply to the problem, and that they were created in accordance
+  with the course's PRIME DIRECTIVE.
+
+  Signed,
+  Alec Agayan,
+  Sean Coughlin,
+  Caitlin Yan

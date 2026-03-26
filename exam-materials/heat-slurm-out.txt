@@ -1,0 +1,112 @@
+spcough@login-1 [CMSC416Assignment2]% cat heat-slurm.sh.job-18442565.out 
+Mon Mar  9 19:25:47 EDT 2026
+compute-a5-3.zaratan.umd.edu
+HEAT 500 6400 with 1 procs
+runtime: procs 1 width 6400 realtime 0.97
+
+HEAT 500 25600 with 1 procs
+runtime: procs 1 width 25600 realtime 0.68
+
+HEAT 500 102400 with 1 procs
+runtime: procs 1 width 102400 realtime 0.74
+
+HEAT 500 204800 with 1 procs
+runtime: procs 1 width 204800 realtime 0.85
+
+HEAT 500 6400 with 2 procs
+runtime: procs 2 width 6400 realtime 0.70
+
+HEAT 500 25600 with 2 procs
+runtime: procs 2 width 25600 realtime 0.69
+
+HEAT 500 102400 with 2 procs
+runtime: procs 2 width 102400 realtime 0.72
+
+HEAT 500 204800 with 2 procs
+runtime: procs 2 width 204800 realtime 0.76
+
+HEAT 500 6400 with 4 procs
+runtime: procs 4 width 6400 realtime 0.69
+
+HEAT 500 25600 with 4 procs
+runtime: procs 4 width 25600 realtime 0.69
+
+HEAT 500 102400 with 4 procs
+runtime: procs 4 width 102400 realtime 0.71
+
+HEAT 500 204800 with 4 procs
+runtime: procs 4 width 204800 realtime 0.73
+
+HEAT 500 6400 with 8 procs
+runtime: procs 8 width 6400 realtime 0.70
+
+HEAT 500 25600 with 8 procs
+runtime: procs 8 width 25600 realtime 0.72
+
+HEAT 500 102400 with 8 procs
+runtime: procs 8 width 102400 realtime 0.75
+
+HEAT 500 204800 with 8 procs
+runtime: procs 8 width 204800 realtime 0.75
+
+HEAT 500 6400 with 10 procs
+runtime: procs 10 width 6400 realtime 0.75
+
+HEAT 500 25600 with 10 procs
+runtime: procs 10 width 25600 realtime 0.74
+
+HEAT 500 102400 with 10 procs
+runtime: procs 10 width 102400 realtime 0.77
+
+HEAT 500 204800 with 10 procs
+runtime: procs 10 width 204800 realtime 0.80
+
+HEAT 500 6400 with 16 procs
+runtime: procs 16 width 6400 realtime 0.84
+
+HEAT 500 25600 with 16 procs
+runtime: procs 16 width 25600 realtime 1.12
+
+HEAT 500 102400 with 16 procs
+runtime: procs 16 width 102400 realtime 0.80
+
+HEAT 500 204800 with 16 procs
+runtime: procs 16 width 204800 realtime 0.84
+
+HEAT 500 6400 with 32 procs
+runtime: procs 32 width 6400 realtime 0.90
+
+HEAT 500 25600 with 32 procs
+runtime: procs 32 width 25600 realtime 0.96
+
+HEAT 500 102400 with 32 procs
+runtime: procs 32 width 102400 realtime 0.99
+
+HEAT 500 204800 with 32 procs
+runtime: procs 32 width 204800 realtime 0.86
+
+HEAT 500 6400 with 64 procs
+runtime: procs 64 width 6400 realtime 1.21
+
+HEAT 500 25600 with 64 procs
+runtime: procs 64 width 25600 realtime 1.25
+
+HEAT 500 102400 with 64 procs
+runtime: procs 64 width 102400 realtime 1.32
+
+HEAT 500 204800 with 64 procs
+runtime: procs 64 width 204800 realtime 1.24
+
+HEAT 500 6400 with 128 procs
+runtime: procs 128 width 6400 realtime 5.40
+
+HEAT 500 25600 with 128 procs
+runtime: procs 128 width 25600 realtime 1.86
+
+HEAT 500 102400 with 128 procs
+runtime: procs 128 width 102400 realtime 2.37
+
+HEAT 500 204800 with 128 procs
+runtime: procs 128 width 204800 realtime 1.66
+
+Mon Mar  9 19:26:26 EDT 2026
